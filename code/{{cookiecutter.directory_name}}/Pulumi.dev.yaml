@@ -1,0 +1,5 @@
+config:
+  global:env: {{ cookiecutter.environment }}
+  global:app-name: {{ cookiecutter.project_name }}
+  aws:region: {{ cookiecutter.aws_region }}
+

@@ -1,0 +1,19 @@
+name: {{ cookiecutter.project_name }}
+runtime:
+  name: python
+  options:
+    toolchain: poetry
+    virtualenv: venv
+description: |
+  {{ cookiecutter.project_short_description }}
+
+main: infra
+
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: aws-python
+
+template:
+  description: |
+    Plantilla de Infraestructura del proyecto

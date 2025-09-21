@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "{{ cookiecutter.project_name }}"
+version = "0.1.0"
+description = "{{ cookiecutter.project_short_description }}"
+authors = ["{{ cookiecutter.author_name }} <{{ cookiecutter.author_email }}>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-dotenv = "^1.0"
+pydantic = "^2.7"
+requests = "^2.32"
+SQLAlchemy = "^2.0"
+pydantic_core = "^2.27"
+python-dateutil = "^2.9"
+urllib3 = "^2.5"
+aws-lambda-powertools = "^3.16.0"
+boto3 = "^1.40.15"
+PyMySQL = "^1.1.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.5.3"
+pyrefly = "^0.27.2"
+pre-commit = "^4.2.0"
+pytest = "^8.2"
+typing_extensions = "^4.12"
+annotated-types = "^0.7.0"
+faker = "^37.5.3"
+pulumi = "^3.191.0"
+pulumi-aws = "^7.6.0"
+fastapi = {extras = ["standard"], version = "^0.116.1"}
+tqdm = "^4.67.1"
+mangum = "^0.19.0"
+uvicorn = "^0.35.0"
+

@@ -1,0 +1,26 @@
+{
+    "directory_name": "",
+    "project_name": "{{ cookiecutter.directory_name.lower().replace(' ', '').replace('-', '').replace('_', '') }}",
+    "repository": "{{ cookiecutter.directory_name }}",
+    "develop_branch": "main",
+    "api_description": "API description",
+    "api_url": "http://localhost:5000",
+    "environment": "dev",
+    "dbDialect": ["sqlite", "mssql", "mysql", "postgresql"],
+    "db_host": "localhost",
+    "db_user": "",
+    "db_pass": "",
+    "db_name": "",
+    "db_schema": "",
+    "_dbDriver": "",
+    "_db_extra_params": "",
+    "docker_local_db_enable": false,
+    "repostory_provider": null,
+    "_db_port": "",
+    "_dbConn": "",
+    "_copy_without_render": [
+        "*/spa/*.txt",
+        "Dockerfile.mssql",
+        ".spa/templates/*"
+    ]
+}

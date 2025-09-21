@@ -1,0 +1,41 @@
+swagger: "2.0"
+info:
+  title: {{ cookiecutter.project_name }} API
+  description: API para {{ cookiecutter.project_short_description }}
+  version: 1.0.0
+servers:
+  - url: https://sandbox.example.com
+    description: Sandbox / QA
+
+paths:
+  /:
+    get:
+      summary: Eco para testeo del api
+      responses:
+        '200':
+          description: 200 response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Empty"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: '200'
+            responseTemplates:
+              application/json: '{"message":"{{ cookiecutter.project_name }} Integration API"}'
+        requestTemplates:
+          application/json: '{"statusCode": 200}'
+        passthroughBehavior: when_no_match
+        type: mock
+
+components:
+  schemas:
+    Empty:
+      type: object
+      title: Empty Schema
+  securitySchemes:
+    api_key:
+      type: apiKey
+      in: header
+      name: x-api-key
