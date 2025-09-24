@@ -1,0 +1,7 @@
+from core_db.BaseService import BaseService
+from core_db.models import {model_name}
+
+
+class {model_name}Service(BaseService):
+    def __init__(self) -> None:
+        super().__init__({model_name})

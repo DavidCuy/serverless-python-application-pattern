@@ -1,0 +1,17 @@
+[spa.project.definition]
+name = "{{ cookiecutter.project_name }}"
+description = "{{ cookiecutter.project_short_description }}"
+
+[spa.template.files]
+model = ".spa/templates/model.txt"
+service = ".spa/templates/service.txt"
+controller = ".spa/templates/controller.txt"
+lambda = ".spa/templates/lambda.txt"
+
+[spa.project.folders]
+root = "src"
+models = "src/layers/databases/python/core_db/models"
+services = "src/layers/databases/python/core_db/services"
+controllers = "src/layers/core/python/core_http/controllers"
+jsons = ".spa/templates/json"
+lambdas = "infra/components/lambdas"
