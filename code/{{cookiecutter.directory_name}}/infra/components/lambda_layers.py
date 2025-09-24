@@ -25,3 +25,10 @@ class LambdaLayersStack(pulumi.ComponentResource):
             code=pulumi.FileArchive(str((output_path / "core").resolve())),
             description="Core layer for Lambda functions"
         )
+
+        self.databases_layer = aws.lambda_.LayerVersion(f"{name}-databases-layer",
+            layer_name=f"{project_config.ENVIRONMENT}-{project_config.APP_NAME}-databases-layer",
+            compatible_runtimes=[aws.lambda_.Runtime.PYTHON3D11],
+            code=pulumi.FileArchive(str((output_path / "databases").resolve())),
+            description="Databases layer for Lambda functions"
+        )

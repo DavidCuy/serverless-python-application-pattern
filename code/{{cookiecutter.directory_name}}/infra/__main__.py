@@ -33,6 +33,7 @@ lambdas_stack = components.LambdaFunctionsStack(
     name=f"{project_config.ENVIRONMENT}-{project_config.APP_NAME}-lambdaFunctionsStack",
     lambda_execution_role_arn=lambda_roles_stack.lambda_execution_role.arn,
     layers=[
+        lambda_layers_stack.databases_layer.arn,
         lambda_layers_stack.core_layer.arn
     ],
     sg_ids=[sg_params],

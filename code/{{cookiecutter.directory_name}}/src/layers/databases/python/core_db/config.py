@@ -6,7 +6,12 @@ from aws_lambda_powertools import Logger
 LOGGER = Logger('layers.core.core_db.config')
 
 CONNECTIONS: dict[str, str] = {
-    
+    'default': {
+        'config_name': 'default',
+        'secret_name': f'{ENVIRONMENT}-{APP_NAME}-app-project-config',
+        'driver': 'psycopg2',
+        'prefix': 'DEFAULT'
+    }
 }
 
 CONNECTIONS_CONFIG = {}
@@ -47,7 +52,7 @@ class DBConfig:
         prefix_lower = self.prefix.lower()
         credentials = get_secret(self.secret_name, is_dict=True, use_prefix=False)
         self.DATABASE_ENGINE = credentials.get(f'{prefix_lower}-db-engine', 'mysql')
-        self.DATABASE_DRIVER = "pymysql"
+        self.DATABASE_DRIVER = CONNECTIONS[self.conn_name]['driver']
         self.DATABASE_USERNAME = credentials.get(f'{prefix_lower}-db-username', 'root')
         self.DATABASE_PASSWORD = credentials.get(f'{prefix_lower}-db-password', 'root')
         self.DATABASE_HOST = credentials.get(f'{prefix_lower}-db-host', 'localhost')

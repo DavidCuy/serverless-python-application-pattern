@@ -13,7 +13,7 @@ CONNECTION_HANDLERS: dict[str, 'DBConnection'] = {}
 
 class DBConnection:
 
-    def __init__(self, config_name: str, secret_name: str = None, prefix: str = 'default') -> None:
+    def __init__(self, config_name: str, secret_name: str = None, prefix: str = 'default', *_, **__) -> None:
         self.config_name = config_name
         self.secret_name = secret_name
         self.prefix = prefix
