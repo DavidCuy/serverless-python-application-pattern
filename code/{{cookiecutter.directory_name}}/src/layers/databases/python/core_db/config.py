@@ -9,7 +9,7 @@ CONNECTIONS: dict[str, str] = {
     'default': {
         'config_name': 'default',
         'secret_name': f'{ENVIRONMENT}-{APP_NAME}-{{ cookiecutter.db_secret_name }}',
-        'driver': 'psycopg2',
+        'driver': '{{ cookiecutter.dbDialect }}',
         'prefix': 'DEFAULT'
     }
 }
