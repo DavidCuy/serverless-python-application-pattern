@@ -8,7 +8,7 @@ LOGGER = Logger('layers.core.core_db.config')
 CONNECTIONS: dict[str, str] = {
     'default': {
         'config_name': 'default',
-        'secret_name': f'{ENVIRONMENT}-{APP_NAME}-app-project-config',
+        'secret_name': '{{ cookiecutter.db_secret_name }}',
         'driver': 'psycopg2',
         'prefix': 'DEFAULT'
     }

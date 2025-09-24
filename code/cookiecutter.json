@@ -17,7 +17,7 @@
     "_dbConn": "",
     "aws_region": "us-east-1",
     "from_secret": false,
-    "secret_name": "",
+    "db_secret_name": "",
     "_copy_without_render": [
         "*/spa/*.txt",
         "*/*template.html",
