@@ -24,7 +24,7 @@
     "aws_region": "us-east-1",
     "_copy_without_render": [
         "*/spa/*.txt",
-        "Dockerfile.mssql",
+        "*/*template.html",
         ".spa/templates/*"
     ]
 }
