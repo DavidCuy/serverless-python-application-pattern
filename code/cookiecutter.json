@@ -1,5 +1,8 @@
 {
+    "author_name": "Your name (or your organization/company/team)",
+    "author_email": "Your email",
     "directory_name": "",
+    "project_short_description": "A short description of the project",
     "project_name": "{{ cookiecutter.directory_name.lower().replace(' ', '').replace('-', '').replace('_', '') }}",
     "repository": "{{ cookiecutter.directory_name }}",
     "develop_branch": "main",
@@ -18,6 +21,7 @@
     "repostory_provider": null,
     "_db_port": "",
     "_dbConn": "",
+    "aws-region": "us-east-1",
     "_copy_without_render": [
         "*/spa/*.txt",
         "Dockerfile.mssql",
