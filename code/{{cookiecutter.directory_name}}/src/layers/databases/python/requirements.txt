@@ -1,5 +1,5 @@
 SQLAlchemy==2.0.43
-{% if cookiecutter.dbDialect != "mysql" %}
+{% if cookiecutter.dbDialect == "mysql" %}
 PyMySQL==1.1.1
 {% endif %}
 {% if cookiecutter.dbDialect == "postgresql" %}
