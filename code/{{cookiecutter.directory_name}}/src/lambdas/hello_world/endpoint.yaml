@@ -1,6 +1,6 @@
-"/v1/vehicles":
+"/hello-world":
   get:
-    summary: Retrieve vehicle information.
+    summary: A hello world example.
     parameters:
     - name: x-api-key
       in: header
