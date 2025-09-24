@@ -1,6 +1,8 @@
 [spa.project.definition]
 name = "{{ cookiecutter.project_name }}"
 description = "{{ cookiecutter.project_short_description }}"
+author = "{{ cookiecutter.author_name }}"
+author_email = "{{ cookiecutter.author_email }}"
 
 [spa.template.files]
 model = ".spa/templates/model.txt"
