@@ -26,7 +26,7 @@ class Test{camel_name}(TestCase):
     
     def test_success(self, *_, **__):
         from lambda_function import lambda_handler
-        event = {
+        event = {{
             "version": "2.0",
             "routeKey": "$default",
             "rawPath": "/path/to/resource",
@@ -35,57 +35,57 @@ class Test{camel_name}(TestCase):
                 "cookie1",
                 "cookie2"
             ],
-            "headers": {
+            "headers": {{
                 "Header1": "value1",
                 "Header2": "value1,value2"
-            },
+            }},
             "queryStringParameters": None,
-            "requestContext": {
+            "requestContext": {{
                 "accountId": "123456789012",
                 "apiId": "api-id",
-                "authentication": {
-                "clientCert": {
+                "authentication": {{
+                "clientCert": {{
                     "clientCertPem": "CERT_CONTENT",
                     "subjectDN": "www.example.com",
                     "issuerDN": "Example issuer",
                     "serialNumber": "a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1",
-                    "validity": {
+                    "validity": {{
                     "notBefore": "May 28 12:30:02 2019 GMT",
                     "notAfter": "Aug  5 09:36:04 2021 GMT"
-                    }
-                }
-                },
-                "authorizer": {
-                "jwt": {
-                    "claims": {
+                    }}
+                }}
+                }},
+                "authorizer": {{
+                "jwt": {{
+                    "claims": {{
                     "claim1": "value1",
                     "claim2": "value2"
-                    },
+                    }},
                     "scopes": [
                     "scope1",
                     "scope2"
                     ]
-                }
-                },
+                }}
+                }},
                 "domainName": "id.execute-api.us-east-1.amazonaws.com",
                 "domainPrefix": "id",
-                "http": {
+                "http": {{
                 "method": "POST",
                 "path": "/path/to/resource",
                 "protocol": "HTTP/1.1",
                 "sourceIp": "192.168.0.1/32",
                 "userAgent": "agent"
-                },
+                }},
                 "requestId": "id",
                 "routeKey": "$default",
                 "stage": "$default",
                 "time": "12/Mar/2020:19:03:58 +0000",
                 "timeEpoch": 1583348638390
-            },
+            }},
             "body": None,
-            "pathParameters": {},
+            "pathParameters": {{}},
             "isBase64Encoded": False
-        }
+        }}
         output = lambda_handler(event, MockContext())
 
         self.assertEqual(output['statusCode'], 200)

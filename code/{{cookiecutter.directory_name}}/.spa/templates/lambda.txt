@@ -7,5 +7,5 @@ logger = Logger()
 
 @logger.inject_lambda_context(log_event=True)
 def lambda_handler(event, context):
-    return build_response(200, {"statusCode": 200, "body": "Success"})
+    return build_response(200, {{"statusCode": 200, "body": "Success"}})
 
