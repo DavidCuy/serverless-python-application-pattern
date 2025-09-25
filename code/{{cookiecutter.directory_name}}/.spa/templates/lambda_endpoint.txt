@@ -1,6 +1,6 @@
 "{endpoint_url}": 
-  get:
-    summary: Retrieve vehicle information.
+  {endpoint_method}:
+    summary: Endpoint.
     parameters:
     - name: x-api-key
       in: header
