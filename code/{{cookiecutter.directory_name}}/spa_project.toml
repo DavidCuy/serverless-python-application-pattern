@@ -5,10 +5,13 @@ author = "{{ cookiecutter.author_name }}"
 author_email = "{{ cookiecutter.author_email }}"
 
 [spa.template.files]
-model = ".spa/templates/model.txt"
-service = ".spa/templates/service.txt"
-controller = ".spa/templates/controller.txt"
-lambda = ".spa/templates/lambda.txt"
+model = ".spa/templates/models/model.txt"
+service = ".spa/templates/models/service.txt"
+controller = ".spa/templates/models/controller.txt"
+endpoint = ".spa/templates/lambda_endpoint.txt"
+lambda_function = ".spa/templates/lambda.txt"
+test_lambda = ".spa/templates/test_lambda_function.txt"
+lambda_conf = ".spa/templates/lambda_conf.txt"
 
 [spa.project.folders]
 root = "src"
