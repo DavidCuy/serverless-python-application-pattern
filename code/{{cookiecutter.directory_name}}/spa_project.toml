@@ -3,6 +3,7 @@ name = "{{ cookiecutter.project_name }}"
 description = "{{ cookiecutter.project_short_description }}"
 author = "{{ cookiecutter.author_name }}"
 author_email = "{{ cookiecutter.author_email }}"
+base_api = "api.yaml"
 
 [spa.template.files]
 model = ".spa/templates/models/model.txt"
@@ -20,3 +21,4 @@ services = "src/layers/databases/python/core_db/services"
 controllers = "src/layers/core/python/core_http/controllers"
 jsons = ".spa/templates/json"
 lambdas = "src/lambdas"
+layers = "src/layers"
