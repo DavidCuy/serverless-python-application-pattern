@@ -8,7 +8,7 @@ from typing import Optional
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class LambdaGetVehiclesStack(pulumi.ComponentResource):
+class LambdaHelloWorldStack(pulumi.ComponentResource):
     def __init__(self,
                  name: str,
                  environment: str,
@@ -19,12 +19,12 @@ class LambdaGetVehiclesStack(pulumi.ComponentResource):
                  subnets_ids: list[str] | None = None,
                  tags: Optional[dict] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
-        super().__init__("{{ cookiecutter.project_name }}:lambdas:LambdaGetVehiclesStack", name, {}, opts)
+        super().__init__("{{ cookiecutter.project_name }}:lambdas:LambdaHelloWorldStack", name, {}, opts)
 
         self.name = name
         self.tags = tags or {}
 
-        lambda_function_name = "get_vehicles"
+        lambda_function_name = "hello_world"
         cur_directory = Path(__file__).parent
 
         # Create a log group for the lambda function

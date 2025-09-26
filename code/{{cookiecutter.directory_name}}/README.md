@@ -87,10 +87,10 @@ Este proyecto es un **template de aplicación serverless Python** diseñado para
 │               │   ├── DBConnection.py # Gestión de conexiones
 │               │   ├── 📁 models/     # Modelos de datos específicos
 │               │   │   ├── __init__.py
-│               │   │   └── vehicles.py # Ejemplo de modelo
+│               │   │   └── myModel.py # Ejemplo de modelo
 │               │   └── 📁 services/   # Servicios de negocio
 │               │       ├── __init__.py
-│               │       └── vehicle_service.py # Ejemplo de servicio
+│               │       └── myModel_service.py # Ejemplo de servicio
 │               │
 │               ├── 📁 core_http/      # Capa de manejo HTTP/REST
 │               │   ├── __init__.py
