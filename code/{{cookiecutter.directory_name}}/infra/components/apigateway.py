@@ -232,8 +232,9 @@ class ApiGatewayStack(pulumi.ComponentResource):
         )
 
         # API Gateway Account
-        aws.apigateway.Account(f"{name}-api-account",
-            cloudwatch_role_arn=self.apig_role.arn
+        self.apig_account = aws.apigateway.Account(f"{name}-api-account",
+            cloudwatch_role_arn=self.apig_role.arn,
+            opts=pulumi.ResourceOptions(parent=self)
         )
 
         # API Gateway Stage
