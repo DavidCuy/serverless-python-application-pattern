@@ -73,8 +73,8 @@ class BaseService:
         """
         return cast(BaseModel, self.model).get_one(session, column_name, column_value)
     
-    def multiple_filters(self, session: Session, filters: List[dict], paginate = False, page = 1, per_page = 10, first: bool = False, search_filters: dict = {}, search_method='AND', order_by: str=None, order_dir: str="asc"):
-        return cast(BaseModel, self.model).filters(session, filters, paginate, page, per_page, first, search_filters, search_method, order_by, order_dir)
+    def multiple_filters(self, session: Session, filters: List[dict], paginate = False, page = 1, per_page = 10, first: bool = False, search_filters: dict = {}, search_method='AND', order_by: str=None, order_dir: str="asc", eager_loads: List[str] = []):
+        return cast(BaseModel, self.model).filters(session, filters, paginate, page, per_page, first, search_filters, search_method, order_by, order_dir, eager_loads)
     
     def count_with_query(self, query: Query) -> int:
         return query.count()

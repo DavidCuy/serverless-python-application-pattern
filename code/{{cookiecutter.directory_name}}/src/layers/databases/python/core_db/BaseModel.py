@@ -1,12 +1,13 @@
 from __future__ import annotations
 import json
+from functools import lru_cache
 from json.encoder import JSONEncoder
 from typing import Any, Dict, List, Type, cast
 from operator import and_, or_
 from sqlalchemy import Column, Integer, orm, cast, String
 from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.query import Query
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase, selectinload
 from sqlalchemy.sql import func
 from typing import List
 from typing import ClassVar
@@ -46,6 +47,13 @@ class BaseModel(DeclarativeBase):
     def get_soft_delete_value():
         return func.now()
 
+    @classmethod
+    @lru_cache(maxsize=None)
+    def _cached_attrs(cls) -> List[str]:
+        preliminar = list(filter(lambda prop: not str(prop).startswith('_'), cls.__dict__.keys()))
+        display_member = cls.display_members()
+        return list(set(preliminar) & set(display_member)) if len(display_member) > 0 else display_member
+
     @property
     def attrs(self) -> List[str]:
         """ Returns a list of the attributes of an object
@@ -53,9 +61,7 @@ class BaseModel(DeclarativeBase):
         Returns:
             List[str]: Attributes
         """
-        preliminar = list(filter(lambda prop: not str(prop).startswith('_'), type(self).__dict__.keys()))
-        display_member = self.__class__.display_members()
-        return list(set(preliminar) & set(display_member)) if len(display_member) > 0 else display_member
+        return self.__class__._cached_attrs()
     
     @classmethod
     def get_connection_params(cls):
@@ -150,7 +156,7 @@ class BaseModel(DeclarativeBase):
         return session.query(cls_).filter_by(**filter_dict).first()
     
     @classmethod
-    def filters(cls_, session: Session, filters: List[dict], paginated: bool = False, page: int = 1, per_page: int = 10, first: bool = False, search_filters: dict = {}, search_method = 'AND',  order_by: str=None, order_dir: str="asc"):
+    def filters(cls_, session: Session, filters: List[dict], paginated: bool = False, page: int = 1, per_page: int = 10, first: bool = False, search_filters: dict = {}, search_method = 'AND',  order_by: str=None, order_dir: str="asc", eager_loads: List[str] = []):
         """ Gets all rows that match with the multiple filters specified in dict (and logic)
 
         Args:
@@ -161,6 +167,12 @@ class BaseModel(DeclarativeBase):
             List[Type[BaseModel]]: List of elements that match with the multiple filters
         """
         query = session.query(cls_)
+
+        if eager_loads:
+            mapper_relationships = set(cls_.__mapper__.relationships.keys())
+            for rel_name in eager_loads:
+                if rel_name in mapper_relationships:
+                    query = query.options(selectinload(getattr(cls_, rel_name)))
         
         search_query = None
         first_run = True

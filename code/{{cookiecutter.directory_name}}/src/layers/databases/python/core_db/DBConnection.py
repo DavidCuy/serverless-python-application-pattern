@@ -1,7 +1,13 @@
 import json
+import uuid
 import decimal
 import datetime
+from functools import lru_cache
 from sqlalchemy import create_engine
+
+@lru_cache(maxsize=None)
+def _get_mapper_relationship_names(cls):
+    return frozenset(cls.__mapper__.relationships.keys())
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import DeclarativeBase
@@ -59,7 +65,14 @@ class AlchemyEncoder(json.JSONEncoder):
             for field in [x for x in obj.attrs]:
                 data = obj.__getattribute__(field)
                 try:
-                    if isinstance(data, (datetime.datetime, datetime.date, datetime.time)):
+                    if isinstance(data, uuid.UUID):
+                        data = str(data)
+                    elif isinstance(data, decimal.Decimal):
+                        if data % 1 > 0:
+                            data = float(data)
+                        else:
+                            data = int(data)
+                    elif isinstance(data, (datetime.datetime, datetime.date, datetime.time)):
                         data = data.isoformat()
                     else:
                         json.dumps(data)
@@ -67,13 +80,6 @@ class AlchemyEncoder(json.JSONEncoder):
                 except TypeError:
                     fields[field] = None
             return fields
-        if isinstance(obj, decimal.Decimal):
-            if obj % 1 > 0:
-                return float(obj)
-            else:
-                return int(obj)
-        if isinstance(obj, (datetime.date, datetime.datetime)):
-            return obj.isoformat()
         return json.JSONEncoder.default(self, obj)
 
 
@@ -81,57 +87,46 @@ class AlchemyRelationEncoder(json.JSONEncoder):
     def __init__(self, *args, relationships=None, max_depth=2, _visited=None, **kwargs):
         self.relationships = relationships or []
         self.max_depth = max_depth
-        self._visited = _visited or set()
+        self._visited = _visited if _visited is not None else set()
         super().__init__(*args, **kwargs)
+
+    def _serialize_value(self, data, depth):
+        if isinstance(data, uuid.UUID):
+            return str(data)
+        elif isinstance(data, decimal.Decimal):
+            return float(data) if data % 1 > 0 else int(data)
+        elif isinstance(data, (datetime.datetime, datetime.date, datetime.time)):
+            return data.isoformat()
+        elif isinstance(data, DeclarativeBase):
+            return self._serialize_model(data, depth)
+        elif isinstance(data, list):
+            return [
+                self._serialize_model(d, depth) if isinstance(d, DeclarativeBase) else d
+                for d in data
+            ]
+        return data
+
+    def _serialize_model(self, obj, depth):
+        if id(obj) in self._visited or depth <= -1:
+            return obj.id
+
+        self._visited.add(id(obj))
+        fields = {}
+        prop_map_obj = obj.__class__.property_map()
+
+        filters_model = _get_mapper_relationship_names(obj.__class__).intersection(self.relationships)
+        attributes = list(obj.attrs) + list(filters_model)
+
+        for field in attributes:
+            data = getattr(obj, field, None)
+            try:
+                fields[prop_map_obj.get(field, field)] = self._serialize_value(data, depth - 1)
+            except Exception:
+                fields[field] = None
+        return fields
 
     def default(self, obj):
         if isinstance(obj, DeclarativeBase):
-            if id(obj) in self._visited or self.max_depth <= 0:
-                return obj.id  # o None si prefieres
-
-            self._visited.add(id(obj))
-            fields = {}
-            prop_map_obj = obj.__class__.property_map()
-
-            relation_names = [attr for attr in obj.__mapper__.relationships.keys()]
-            filters_model = set(self.relationships).intersection(relation_names)
-            attributes = list(obj.attrs) + list(filters_model)
-
-            for field in attributes:
-                data = getattr(obj, field, None)
-                try:
-                    if isinstance(data, (datetime.datetime, datetime.date, datetime.time)):
-                        data = data.isoformat()
-                    elif isinstance(data, DeclarativeBase):
-                        # Use a shallow clone with reduced depth
-                        data = json.loads(json.dumps(
-                            data,
-                            cls=self.__class__,
-                            relationships=self.relationships,
-                            max_depth=self.max_depth - 1,
-                            _visited=self._visited.copy(),
-                        ))
-                    elif isinstance(data, list):
-                        data = [
-                            json.loads(json.dumps(
-                                d,
-                                cls=self.__class__,
-                                relationships=self.relationships,
-                                max_depth=self.max_depth - 1,
-                                _visited=self._visited.copy(),
-                            )) if isinstance(d, DeclarativeBase) else d
-                            for d in data
-                        ]
-                    fields[prop_map_obj.get(field, field)] = data
-                except Exception:
-                    fields[field] = None
-            return fields
-
-        if isinstance(obj, decimal.Decimal):
-            return float(obj) if obj % 1 else int(obj)
-
-        if isinstance(obj, (datetime.datetime, datetime.date)):
-            return obj.isoformat()
-
+            return self._serialize_model(obj, self.max_depth)
         return super().default(obj)
 

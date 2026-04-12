@@ -25,7 +25,6 @@ def index(service: BaseService, request: dict):
     relationship_retrieve = get_relationship_params(request)
     filter_query = get_filter_params(request)
     filter_keys = filter_query.keys()
-    prefix_host = request.get('headers', {}).get('er-company-request', None)
     params = request.get("queryStringParameters") or {}
     order_by = params.get("order_by")
     order_dir = params.get("order_dir", "asc")
@@ -59,10 +58,10 @@ def index(service: BaseService, request: dict):
         })
     
     try:
-        query, elements = cast(BaseService, service).multiple_filters(session, filters, True, page, per_page, search_filters=filters_search, search_method=search_method,order_by=order_by,order_dir=order_dir)
+        query, elements = cast(BaseService, service).multiple_filters(session, filters, True, page, per_page, search_filters=filters_search, search_method=search_method, order_by=order_by, order_dir=order_dir, eager_loads=relationship_retrieve.get('relationships', []))
         total_elements = cast(BaseService, service).count_with_query(query)
         
-        body = PaginationResult(elements, page, per_page, total_elements, refType=cast(BaseService, service).model, prefix_host=prefix_host).to_dict()
+        body = PaginationResult(elements, page, per_page, total_elements, refType=cast(BaseService, service).model).to_dict()
         body['data'] = list(map(lambda d: dict(
                 **cast(BaseModel, d).to_dict(jsonEncoder=encoder, encoder_extras=relationship_retrieve)
             ), body['data'])
