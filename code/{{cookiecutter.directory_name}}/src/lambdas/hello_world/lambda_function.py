@@ -1,7 +1,8 @@
 from core_utils.logging import Logger
 from core_http.utils import build_response
 
-logger = Logger()
+service_name = __name__.split('.')[-2] if '.' in __name__ else "service_unknown"
+logger = Logger(service=service_name)
 
 
 @logger.inject_lambda_context(log_event=True)
