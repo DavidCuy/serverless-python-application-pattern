@@ -18,7 +18,7 @@
     "aws_region": "us-east-1",
     "from_secret": false,
     "db_secret_name": "",
-    "provider": ["aws", "gcp", "azure", "cloudflare"],
+    "provider": ["aws", "gcp", "azure", "cloudflare", "container-cloud"],
     "_copy_without_render": [
         "*/spa/*.txt",
         "*/*template.html",

@@ -2,7 +2,7 @@
 import json
 
 import boto3
-from aws_lambda_powertools import Logger
+from core_utils.logging import Logger
 from botocore import exceptions
 from core_utils.environment import (
     ENVIRONMENT,

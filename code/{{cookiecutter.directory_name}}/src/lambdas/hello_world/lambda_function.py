@@ -1,4 +1,4 @@
-from aws_lambda_powertools import Logger
+from core_utils.logging import Logger
 from core_http.utils import build_response
 
 logger = Logger()

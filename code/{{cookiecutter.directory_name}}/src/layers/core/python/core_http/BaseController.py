@@ -15,7 +15,7 @@ from .utils import build_response, get_paginate_params, get_filter_params, get_r
 from core_db.BaseModel import BaseModel
 from core_db.BaseService import BaseService
 from core_db.DBConnection import AlchemyEncoder, AlchemyRelationEncoder, DBConnection
-from aws_lambda_powertools import Logger
+from core_utils.logging import Logger
 
 LOGGER = Logger('layers.core.core_http.base_controller')
 

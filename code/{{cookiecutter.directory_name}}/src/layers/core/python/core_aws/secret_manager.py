@@ -1,6 +1,6 @@
 import boto3
 import json
-from aws_lambda_powertools import Logger
+from core_utils.logging import Logger
 from botocore.exceptions import ClientError
 from core_utils.environment import ENVIRONMENT, APP_NAME
 

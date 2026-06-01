@@ -5,4 +5,7 @@ SQLAlchemy==2.0.43
 pydantic_core==2.33.2
 python-dateutil==2.9.0.post0
 urllib3==2.5.0
+{% if cookiecutter.provider == "aws" %}
 aws_lambda_powertools==3.19.0
+boto3==1.38.0
+{% endif %}

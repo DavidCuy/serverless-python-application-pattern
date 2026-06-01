@@ -1,7 +1,7 @@
 import os
 from typing import Any
 from dotenv import load_dotenv
-from aws_lambda_powertools import Logger
+from core_utils.logging import Logger
 
 LOGGER = Logger('layers.core.core_utils.environment')
 load_dotenv()

@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import cast, Self
 
 from core_utils.environment import env, APP_NAME, ENVIRONMENT
-from aws_lambda_powertools import Logger
+from core_utils.logging import Logger
 
 LOGGER = Logger('layers.core.core_db.config')
 

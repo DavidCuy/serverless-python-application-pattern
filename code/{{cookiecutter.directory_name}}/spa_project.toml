@@ -4,8 +4,8 @@ description = "{{ cookiecutter.project_short_description }}"
 author = "{{ cookiecutter.author_name }}"
 author_email = "{{ cookiecutter.author_email }}"
 base_api = "api.yaml"
-api_build_mode = "serverless"
-provider = "aws"
+api_build_mode = "{% if cookiecutter.provider == 'container-cloud' %}container{% else %}serverless{% endif %}"
+provider = "{{ cookiecutter.provider }}"
 
 [spa.template.files]
 model = ".spa/templates/models/model.txt"

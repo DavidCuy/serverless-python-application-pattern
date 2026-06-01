@@ -6,7 +6,7 @@ from botocore.exceptions import (
     ClientError,
 )
 
-from aws_lambda_powertools import Logger
+from core_utils.logging import Logger
 
 __all__ = [
     "delete_sqs_messages",
