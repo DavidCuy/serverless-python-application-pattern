@@ -5,7 +5,8 @@ import datetime
 from abc import ABC, abstractmethod
 from typing import Any
 
-CLOUD_PROVIDER = os.getenv('CLOUD_PROVIDER', 'aws')
+from dotenv import load_dotenv
+load_dotenv()
 
 _cold_start = True
 
@@ -98,6 +99,7 @@ _DEFAULT_STRATEGY = DefaultLoggingStrategy()
 
 def Logger(service: str = None) -> Any:
     """Factory matching aws_lambda_powertools.Logger(service) API."""
+    cloud_provider = os.getenv('CLOUD_PROVIDER', '')
     resolved = service or os.getenv('POWERTOOLS_SERVICE_NAME') or os.getenv('APP_NAME', 'service')
-    strategy = _STRATEGIES.get(CLOUD_PROVIDER, _DEFAULT_STRATEGY)
+    strategy = _STRATEGIES.get(cloud_provider, _DEFAULT_STRATEGY)
     return strategy.get_logger(resolved)
