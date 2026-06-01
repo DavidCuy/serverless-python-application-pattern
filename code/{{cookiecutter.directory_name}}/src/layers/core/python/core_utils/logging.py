@@ -96,7 +96,8 @@ _STRATEGIES: dict[str, LoggingStrategy] = {
 _DEFAULT_STRATEGY = DefaultLoggingStrategy()
 
 
-def Logger(service: str) -> Any:
+def Logger(service: str = None) -> Any:
     """Factory matching aws_lambda_powertools.Logger(service) API."""
+    resolved = service or os.getenv('POWERTOOLS_SERVICE_NAME') or os.getenv('APP_NAME', 'service')
     strategy = _STRATEGIES.get(CLOUD_PROVIDER, _DEFAULT_STRATEGY)
-    return strategy.get_logger(service)
+    return strategy.get_logger(resolved)
