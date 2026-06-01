@@ -54,7 +54,8 @@ class Lambda{camel_name}Stack(pulumi.ComponentResource):
                 variables={{
                 "ENVIRONMENT": environment,
                 "APP_NAME": app_name,
-                "LOG_LEVEL": "INFO"
+                "LOG_LEVEL": "INFO",
+                "CLOUD_PROVIDER": "{provider}",
             }}),
             vpc_config=aws.lambda_.FunctionVpcConfigArgs(
                 security_group_ids=sg_ids,
