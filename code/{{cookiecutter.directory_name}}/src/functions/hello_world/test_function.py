@@ -24,7 +24,7 @@ class TestHelloWorld(TestCase):
         return super().setUp()
 
     def test_success(self, *_, **__):
-        from lambda_function import lambda_handler
+        from function import lambda_handler
         event = {
             "version": "2.0",
             "routeKey": "$default",
