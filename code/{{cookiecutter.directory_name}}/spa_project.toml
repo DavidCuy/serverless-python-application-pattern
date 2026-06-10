@@ -12,9 +12,9 @@ model = ".spa/templates/models/model.txt"
 service = ".spa/templates/models/service.txt"
 controller = ".spa/templates/models/controller.txt"
 endpoint = ".spa/templates/{{ cookiecutter.provider }}/function_endpoint.txt"
-lambda_function = ".spa/templates/{{ cookiecutter.provider }}/function.txt"
-test_lambda = ".spa/templates/{{ cookiecutter.provider }}/test_function.txt"
-lambda_conf = ".spa/templates/{{ cookiecutter.provider }}/function_conf.txt"
+function = ".spa/templates/{{ cookiecutter.provider }}/function.txt"
+test_function = ".spa/templates/{{ cookiecutter.provider }}/test_function.txt"
+function_conf = ".spa/templates/{{ cookiecutter.provider }}/function_conf.txt"
 
 [spa.project.folders]
 root = "src"
