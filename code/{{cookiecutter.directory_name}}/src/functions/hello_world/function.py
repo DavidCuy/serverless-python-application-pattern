@@ -6,7 +6,7 @@ logger = Logger(service=service_name)
 
 
 @logger.inject_lambda_context(log_event=True)
-def lambda_handler(event, context):
+def function_handler(event, context):
     logger.info(event)
     return build_response(200, {"statusCode": 200, "body": "Success"})
 

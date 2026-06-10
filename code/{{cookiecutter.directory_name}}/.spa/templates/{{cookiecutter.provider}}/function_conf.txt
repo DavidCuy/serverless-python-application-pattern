@@ -41,7 +41,7 @@ class Lambda{camel_name}Stack(pulumi.ComponentResource):
             name=f"{{environment}}-{{app_name}}-{{function_name}}",
             description="Lambda function",
             role=lambda_execution_role_arn,
-            handler="function.lambda_handler",
+            handler="function.function_handler",
             runtime=aws.lambda_.Runtime.PYTHON3D11,
             code=pulumi.asset.AssetArchive({{
                 ".": pulumi.asset.FileArchive(str(cur_directory.resolve()))

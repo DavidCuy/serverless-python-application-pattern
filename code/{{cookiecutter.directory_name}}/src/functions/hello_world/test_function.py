@@ -24,7 +24,7 @@ class TestHelloWorld(TestCase):
         return super().setUp()
 
     def test_success(self, *_, **__):
-        from function import lambda_handler
+        from function import function_handler
         event = {
             "version": "2.0",
             "routeKey": "$default",
@@ -85,7 +85,7 @@ class TestHelloWorld(TestCase):
             "pathParameters": {},
             "isBase64Encoded": False
         }
-        output = lambda_handler(event, MockContext())
+        output = function_handler(event, MockContext())
         logging.info(output)
 
 test = TestHelloWorld()
