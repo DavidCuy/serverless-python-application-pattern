@@ -22,3 +22,7 @@ if PROVIDER in INFRA_LESS_PROVIDERS:
     if infra_path.exists():
         shutil.rmtree(infra_path)
         print(f"[post-gen] Removed {infra_path} (provider={PROVIDER})")
+
+    for infra_config in Path("src/functions").glob("*/infra_config.py"):
+        infra_config.unlink()
+        print(f"[post-gen] Removed {infra_config} (provider={PROVIDER})")
