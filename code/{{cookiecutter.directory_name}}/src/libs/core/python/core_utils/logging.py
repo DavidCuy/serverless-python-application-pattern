@@ -24,9 +24,7 @@ class _PowertoolsFormatter(logging.Formatter):
             'timestamp': timestamp,
             'service': record.name,
             'cold_start': _cold_start,
-            'function_name': os.getenv('AWS_LAMBDA_FUNCTION_NAME', os.getenv('APP_NAME', 'unknown')),
-            'function_memory_size': int(os.getenv('AWS_LAMBDA_FUNCTION_MEMORY_SIZE', 128)),
-            'function_arn': os.getenv('AWS_LAMBDA_FUNCTION_ARN', ''),
+            'function_name': os.getenv('APP_NAME', 'unknown'),
             'function_request_id': os.getenv('_X_AMZN_TRACE_ID', ''),
         }
 

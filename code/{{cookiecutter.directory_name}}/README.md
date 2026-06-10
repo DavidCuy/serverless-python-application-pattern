@@ -59,14 +59,14 @@ Este proyecto es un **template de aplicación serverless Python** diseñado para
 │           └── ssm.py                  # Manejo de AWS Systems Manager
 │
 ├── 📁 src/                            # Código fuente de la aplicación
-│   ├── 📁 lambdas/                    # Funciones Lambda individuales
-│   │   └── 📁 hello_world/            # Ejemplo de función Lambda
+│   ├── 📁 functions/                  # Funciones individuales
+│   │   └── 📁 hello_world/            # Ejemplo de función
 │   │       ├── endpoint.yaml          # Definición del endpoint OpenAPI
 │   │       ├── infra_config.py        # Configuración de infraestructura específica
-│   │       ├── lambda_function.py     # Código principal de la función
-│   │       └── test_lambda_function.py # Tests unitarios
+│   │       ├── function.py            # Código principal de la función
+│   │       └── test_function.py       # Tests unitarios
 │   │
-│   └── 📁 layers/                     # Capas compartidas de la aplicación
+│   └── 📁 libs/                       # Capas compartidas de la aplicación
 │       └── 📁 core/                   # Capa principal del sistema
 │           ├── __init__.py
 │           └── 📁 python/             # Código Python de la capa
@@ -139,13 +139,13 @@ Este proyecto es un **template de aplicación serverless Python** diseñado para
 - **Configuración flexible**: Soporte para múltiples entornos (dev, qa, prod)
 - **Utilidades AWS**: Integración con Secrets Manager, SSM, SQS
 
-#### 🚀 **Funciones Lambda (`src/lambdas/`)**
+#### 🚀 **Funciones (`src/functions/`)**
 - **Estructura modular**: Cada función en su propio directorio
 - **Configuración por función**: `endpoint.yaml` define la API específica
 - **Tests incluidos**: Tests unitarios para cada función
 - **Configuración de infraestructura**: Parámetros específicos por función
 
-#### 🧩 **Capas Compartidas (`src/layers/core/python/`)**
+#### 🧩 **Capas Compartidas (`src/libs/core/python/`)**
 - **core_db**: ORM con SQLAlchemy, modelos base, servicios genéricos
 - **core_http**: Controladores REST, validación, manejo de errores
 - **core_aws**: Utilidades específicas de AWS (Secrets, SSM, SQS)
@@ -225,7 +225,7 @@ python -m fastapi dev dev_tools/main_server.py
 ```
 
 ## Pruebas
-Los módulos de prueba para cada lambda están en `src/lambdas/*/test_lambda_function.py`. Ejecuta con pytest:
+Los módulos de prueba para cada función están en `src/functions/*/test_function.py`. Ejecuta con pytest:
 ```
 pytest
 ```
