@@ -19,26 +19,26 @@ class LambdaHelloWorldStack(pulumi.ComponentResource):
                  subnets_ids: list[str] | None = None,
                  tags: Optional[dict] = None,
                  opts: Optional[pulumi.ResourceOptions] = None):
-        super().__init__("{{ cookiecutter.project_name }}:lambdas:LambdaHelloWorldStack", name, {}, opts)
+        super().__init__("{{ cookiecutter.project_name }}:functions:LambdaHelloWorldStack", name, {}, opts)
 
         self.name = name
         self.tags = tags or {}
 
-        lambda_function_name = "hello_world"
+        function_name = "hello_world"
         cur_directory = Path(__file__).parent
 
         # Create a log group for the lambda function
         self.lambda_log_group = aws.cloudwatch.LogGroup(
-            f"{name}-{lambda_function_name}lambda-log-group",
-            name=f"/aws/lambda/{environment}-{app_name}-{lambda_function_name}",
+            f"{name}-{function_name}-log-group",
+            name=f"/aws/lambda/{environment}-{app_name}-{function_name}",
             retention_in_days=5,
             opts=pulumi.ResourceOptions(parent=self)
         )
 
         # Create a lambda function
-        self.lambda_function = aws.lambda_.Function(
-            f"{name}-lambda-function",
-            name=f"{environment}-{app_name}-{lambda_function_name}",
+        self.function = aws.lambda_.Function(
+            f"{name}-function",
+            name=f"{environment}-{app_name}-{function_name}",
             description="Lambda function",
             role=lambda_execution_role_arn,
             handler="function.lambda_handler",
@@ -69,7 +69,7 @@ class LambdaHelloWorldStack(pulumi.ComponentResource):
        
 
         self.register_outputs({
-            "lambda_function_name": self.lambda_function.name
+            "function_name": self.function.name
         })
 
         
