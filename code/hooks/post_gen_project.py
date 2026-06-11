@@ -4,9 +4,12 @@ from pathlib import Path
 PROVIDER = "{{ cookiecutter.provider }}"
 
 AWS_ONLY_PATHS = [
-    Path("src/layers/core/python/core_aws"),
-    # TODO: Path("infra/utils/aws"),
-    # TODO: Path("infra/components"),  # Pulumi-AWS infra — pendiente multicloud
+    Path("src/libs/core/python/core_aws"),
+    Path("infra/utils/aws"),
+    Path("infra/components/apigateway.py"),
+    Path("infra/components/lambda_role.py"),
+    Path("infra/components/lambda_layers.py"),
+    Path("infra/components/lambda_functions.py"),
 ]
 
 INFRA_LESS_PROVIDERS = {"container-cloud"}
@@ -14,7 +17,10 @@ INFRA_LESS_PROVIDERS = {"container-cloud"}
 if PROVIDER != "aws":
     for path in AWS_ONLY_PATHS:
         if path.exists():
-            shutil.rmtree(path)
+            if path.is_dir():
+                shutil.rmtree(path)
+            else:
+                path.unlink()
             print(f"[post-gen] Removed {path} (provider={PROVIDER})")
 
 if PROVIDER in INFRA_LESS_PROVIDERS:
