@@ -24,3 +24,10 @@ controllers = "src/libs/core/python/core_http/controllers"
 jsons = ".spa/templates/json"
 functions = "src/functions"
 libs = "src/libs"
+{% if cookiecutter.provider == 'aws' %}
+infra_functions = "infra/providers/aws/components/lambdas"
+infra_openapi = "infra/providers/aws/components/openapi.json"
+{% else %}
+infra_functions = ""
+infra_openapi = ""
+{% endif %}
