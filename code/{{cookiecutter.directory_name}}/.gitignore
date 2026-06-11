@@ -213,6 +213,6 @@ src/api_local/
 src/api_local/*
 dev_tools/openapi.json
 tmp_build_layer/
-infra/components/lambdas/*
-!infra/components/lambdas/__init__.py
-infra/components/openapi.json
+infra/providers/*/components/lambdas/*
+!infra/providers/*/components/lambdas/__init__.py
+infra/providers/*/components/openapi.json

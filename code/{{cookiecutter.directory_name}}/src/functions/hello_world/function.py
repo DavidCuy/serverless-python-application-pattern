@@ -5,7 +5,7 @@ service_name = __name__.split('.')[-2] if '.' in __name__ else "service_unknown"
 logger = Logger(service=service_name)
 
 
-@logger.inject_lambda_context(log_event=True)
+@logger.inject_function_context(log_event=True)
 def function_handler(event, context):
     logger.info(event)
     return build_response(200, {"statusCode": 200, "body": "Success"})

@@ -28,6 +28,7 @@
           "$ref": "#/responses/Unauthorized"
     security:
     - api_key: []
+{% if cookiecutter.provider == 'aws' %}
     x-amazon-apigateway-request-validator: Validate query string parameters and headers
     x-amazon-apigateway-integration:
       uri: "{uri-integration}"
@@ -43,6 +44,7 @@
       httpMethod: POST
       contentHandling: CONVERT_TO_TEXT
       type: aws_proxy
+{% endif %}
   options:
     consumes:
     - application/json
@@ -60,6 +62,7 @@
             type: string
           Access-Control-Allow-Headers:
             type: string
+{% if cookiecutter.provider == 'aws' %}
     x-amazon-apigateway-integration:
       responses:
         default:
@@ -72,3 +75,4 @@
       requestTemplates:
         application/json: '{"statusCode": 200}'
       type: mock
+{% endif %}

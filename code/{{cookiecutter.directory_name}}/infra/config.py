@@ -9,17 +9,6 @@ except Exception:
 APP_NAME = pulumi.Config("global").require("app-name")
 ROOT_PROJECT = Path(__file__).parent.parent
 
-{% if cookiecutter.provider == 'aws' %}
-import pulumi_aws as aws
-
-try:
-    AWS_REGION = pulumi.Config("aws").require("region")
-except Exception:
-    AWS_REGION = "us-east-1"
-
-AWS_ACCOUNT_ID = aws.get_caller_identity().account_id
-{% endif %}
-
 def add_param_prefix(param_name: str) -> str:
     return f"/{ENVIRONMENT.lower()}/{APP_NAME.lower()}/{param_name}"
 

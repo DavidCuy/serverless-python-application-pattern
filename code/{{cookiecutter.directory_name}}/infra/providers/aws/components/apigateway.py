@@ -3,7 +3,7 @@ import logging
 import hashlib
 import pulumi
 import pulumi_aws as aws
-import config as project_config
+from providers.aws import config as project_config
 
 from typing import Optional
 from enum import Enum
@@ -13,18 +13,7 @@ from typing import cast
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class HttpMethod (Enum):
-    """
-    Enum class representing HTTP methods.
-
-    Attributes:
-        GET (str): Represents the HTTP GET method, used to retrieve data from a server.
-        POST (str): Represents the HTTP POST method, used to send data to a server to create a resource.
-        PUT (str): Represents the HTTP PUT method, used to update or create a resource on a server.
-        PATCH (str): Represents the HTTP PATCH method, used to apply partial modifications to a resource.
-        DELETE (str): Represents the HTTP DELETE method, used to delete a resource from a server.
-        OPTIONS (str): Represents the HTTP OPTIONS method, used to describe the communication options for the target resource.
-    """
+class HttpMethod(Enum):
     GET = "GET"
     POST = "POST"
     PUT = "PUT"
@@ -32,45 +21,17 @@ class HttpMethod (Enum):
     DELETE = "DELETE"
     OPTIONS = "OPTIONS"
 
-class IntegrationType (Enum):
-    """
-    Enum class representing the types of integrations available for the API Gateway.
-
-    Attributes:
-        MOCK: Represents a mocked integration type, typically used for testing or development purposes.
-    """
+class IntegrationType(Enum):
     MOCK = "MOCK"
 
 class AuthType(Enum):
-    """
-    AuthType is an enumeration that defines the types of authentication
-    supported by the API Gateway.
-
-    Attributes:
-        NONE: Represents no authentication required.
-    """
     NONE = "NONE"
 
 class HttpStatusCode(Enum):
-    """
-    Enum class representing HTTP status codes.
-    Attributes:
-        OK (str): HTTP status code for a successful request (200).
-        CREATED (str): HTTP status code indicating that a resource has been successfully created (201).
-        ACCEPTED (str): HTTP status code indicating that a request has been accepted for processing, but the processing is not complete (202).
-        NO_CONTENT (str): HTTP status code indicating that the server successfully processed the request, but is not returning any content (204).
-        BAD_REQUEST (str): HTTP status code indicating that the server could not understand the request due to invalid syntax (400).
-        UNAUTHORIZED (str): HTTP status code indicating that authentication is required and has failed or has not been provided (401).
-        FORBIDDEN (str): HTTP status code indicating that the server understands the request but refuses to authorize it (403).
-        NOT_FOUND (str): HTTP status code indicating that the requested resource could not be found (404).
-        METHOD_NOT_ALLOWED (str): HTTP status code indicating that the request method is not supported for the requested resource (405).
-        UNPROCESSABLE_CONTENT (str): HTTP status code indicating that the server understands the content type of the request entity, but was unable to process the contained instructions (422).
-    """
     OK = "200"
     CREATED = "201"
     ACCEPTED = "202"
     NO_CONTENT = "204"
-
     BAD_REQUEST = "400"
     UNAUTHORIZED = "401"
     FORBIDDEN = "403"
@@ -79,15 +40,6 @@ class HttpStatusCode(Enum):
     UNPROCESSABLE_CONTENT = "422"
 
 class ApiRestEndpoint:
-    """
-    Represents a REST API endpoint in an API Gateway.
-
-    Attributes:
-        method (pulumi.Output): The HTTP method (e.g., GET, POST) associated with the API endpoint.
-        integration (pulumi.Output): The integration configuration for the API endpoint, defining how the endpoint interacts with backend resources.
-        method_response (pulumi.Output): The response configuration for the method, specifying the response status codes, headers, and models.
-        integration_response (pulumi.Output): The response configuration for the integration, specifying how the backend responses are mapped to the method responses.
-    """
     def __init__(self, method: pulumi.Output,
                  integration: pulumi.Output,
                  method_response: pulumi.Output,
@@ -110,7 +62,6 @@ class ApiGatewayStack(pulumi.ComponentResource):
 
         (openapi_body, openapi_sha) = self.build_openapi_file()
 
-        # Create a REST API gateway
         self.rest_api = aws.apigateway.RestApi(f"{name}-api",
             name=f"{project_config.ENVIRONMENT}-{project_config.APP_NAME}-gateway",
             body=openapi_body,
@@ -126,7 +77,6 @@ class ApiGatewayStack(pulumi.ComponentResource):
             opts=pulumi.ResourceOptions(parent=self)
         )
 
-        # Api Gateway deployment
         self.apig_deploy = aws.apigateway.Deployment(f"{name}-api-deployment",
             rest_api=self.rest_api.id,
             triggers={
@@ -142,7 +92,6 @@ class ApiGatewayStack(pulumi.ComponentResource):
             tags=self.tags
         )
 
-        # Api Gateway Role for invoke functions and logging
         self.apig_role = aws.iam.Role(
             f"{name}-apig-role",
             name=f"{project_config.ENVIRONMENT}-{project_config.APP_NAME}-apigw-invoke-lambda-role",
@@ -165,9 +114,7 @@ class ApiGatewayStack(pulumi.ComponentResource):
                     "policy": json.dumps({
                         "Version": "2012-10-17",
                         "Statement": [{
-                            "Action": [
-                                "lambda:InvokeFunction"
-                            ],
+                            "Action": ["lambda:InvokeFunction"],
                             "Effect": "Allow",
                             "Resource": [f"arn:aws:lambda:{project_config.AWS_REGION}:{project_config.AWS_ACCOUNT_ID}:function:{project_config.ENVIRONMENT}-{project_config.APP_NAME}-*"]
                         }],
@@ -178,11 +125,8 @@ class ApiGatewayStack(pulumi.ComponentResource):
                     "policy": json.dumps({
                         "Version": "2012-10-17",
                         "Statement": [{
-                            "Action": [
-                                "lambda:InvokeFunction"
-                            ],
+                            "Action": ["lambda:InvokeFunction"],
                             "Effect": "Allow",
-                            
                             "Resource": [f"arn:aws:lambda:{project_config.AWS_REGION}:{project_config.AWS_ACCOUNT_ID}:function:{project_config.ENVIRONMENT}-{project_config.APP_NAME}-*"]
                         }],
                     }),
@@ -193,13 +137,9 @@ class ApiGatewayStack(pulumi.ComponentResource):
                         "Version": "2012-10-17",
                         "Statement": [{
                             "Action": [
-                                "logs:CreateLogGroup",
-                                "logs:CreateLogStream",
-                                "logs:DescribeLogGroups",
-                                "logs:DescribeLogStreams",
-                                "logs:PutLogEvents",
-                                "logs:GetLogEvents",
-                                "logs:FilterLogEvents"
+                                "logs:CreateLogGroup", "logs:CreateLogStream",
+                                "logs:DescribeLogGroups", "logs:DescribeLogStreams",
+                                "logs:PutLogEvents", "logs:GetLogEvents", "logs:FilterLogEvents"
                             ],
                             "Effect": "Allow",
                             "Resource": [f"arn:aws:logs:{project_config.AWS_REGION}:{project_config.AWS_ACCOUNT_ID}:log-group:/aws/lambda/{project_config.ENVIRONMENT}-{project_config.APP_NAME}-*"]
@@ -212,13 +152,9 @@ class ApiGatewayStack(pulumi.ComponentResource):
                         "Version": "2012-10-17",
                         "Statement": [{
                             "Action": [
-                                "logs:CreateLogGroup",
-                                "logs:CreateLogStream",
-                                "logs:DescribeLogGroups",
-                                "logs:DescribeLogStreams",
-                                "logs:PutLogEvents",
-                                "logs:GetLogEvents",
-                                "logs:FilterLogEvents"
+                                "logs:CreateLogGroup", "logs:CreateLogStream",
+                                "logs:DescribeLogGroups", "logs:DescribeLogStreams",
+                                "logs:PutLogEvents", "logs:GetLogEvents", "logs:FilterLogEvents"
                             ],
                             "Effect": "Allow",
                             "Resource": [f"arn:aws:logs:{project_config.AWS_REGION}:{project_config.AWS_ACCOUNT_ID}:log-group:/aws/lambda/{project_config.ENVIRONMENT}-{project_config.APP_NAME}-*"]
@@ -231,13 +167,10 @@ class ApiGatewayStack(pulumi.ComponentResource):
             opts=pulumi.ResourceOptions(parent=self)
         )
 
-        # API Gateway Account
         self.apig_account = aws.apigateway.Account(f"{name}-api-account",
             cloudwatch_role_arn=self.apig_role.arn,
             opts=pulumi.ResourceOptions(parent=self)
         )
-
-        # API Gateway Stage
 
         access_logs_settings = aws.apigateway.StageAccessLogSettingsArgs(
             destination_arn=self.apig_log_group.arn,
@@ -263,7 +196,6 @@ class ApiGatewayStack(pulumi.ComponentResource):
             tags=self.tags
         )
 
-        # Usage plan and api key
         self.api_usage_plan = aws.apigateway.UsagePlan(f"{name}-api-usage-plan",
             api_stages=[aws.apigateway.UsagePlanApiStageArgs(
                 api_id=self.rest_api.id,
@@ -286,39 +218,8 @@ class ApiGatewayStack(pulumi.ComponentResource):
             usage_plan_id=self.api_usage_plan.id
         )
 
-        # TODO: Implement custom domain names
-        #root_domain_name = aws.apigateway.DomainName(f"{name}-root-domain-name",
-        #    domain_name=aws.ssm.get_parameter(name=project_config.API_BACK_CUSTOM_DOMAIN_ROOT_SSM).value,
-        #    endpoint_configuration=aws.apigateway.DomainNameEndpointConfigurationArgs(
-        #        types="EDGE"
-        #    ),
-        #    security_policy="TLS_1_2",
-        #    certificate_arn=aws.ssm.get_parameter(name=project_config.CERTIFICATE_APIG_SSM).value
-        #)
-        #
-        #aws.apigateway.BasePathMapping(f"{name}-root-mapping",
-        #    rest_api=self.rest_api.id,
-        #    stage_name=self.stage.stage_name,
-        #    domain_name=root_domain_name.domain_name
-        #)
-        #
-        #wildcard_domain_name = aws.apigateway.DomainName(f"{name}-wildcard-domain-name",
-        #    domain_name=aws.ssm.get_parameter(name=project_config.API_BACK_CUSTOM_DOMAIN_WILDCARD_SSM).value,
-        #    endpoint_configuration=aws.apigateway.DomainNameEndpointConfigurationArgs(
-        #        types="EDGE"
-        #    ),
-        #    security_policy="TLS_1_2",
-        #    certificate_arn=aws.ssm.get_parameter(name=project_config.CERTIFICATE_APIG_SSM).value
-        #)
-        #
-        #aws.apigateway.BasePathMapping(f"{name}-wildcard-mapping",
-        #    rest_api=self.rest_api.id,
-        #    stage_name=self.stage.stage_name,
-        #    domain_name=wildcard_domain_name.domain_name
-        #)
-
         self.invoke_url = pulumi.Output.concat("https://", self.rest_api.id, ".execute-api.", aws.config.region, ".amazonaws.com/", project_config.ENVIRONMENT, "/")
-        
+
         self.api_resource = aws.apigateway.Resource(f"{name}-api",
             rest_api=self.rest_api.id,
             parent_id=self.rest_api.root_resource_id,
@@ -334,18 +235,9 @@ class ApiGatewayStack(pulumi.ComponentResource):
         })
 
     def build_openapi_file(self) -> tuple[str, str]:
-        # Read openApi file
         raw_spec = (Path(__file__).parent / self.OPEN_API_SPEC).read_text(encoding="utf-8")
-
-        # Parse the OpenAPI specification
         spec = json.loads(raw_spec)
-        logger.info(f"Loaded OpenAPI spec: {Path(__file__).parent / self.OPEN_API_SPEC}")
-
-        # Modify the spec as needed
         spec['info']['title'] = f"{project_config.APP_NAME} API"
-
-        # Serialize json
         openapi_body = json.dumps(spec)
         openapi_sha = hashlib.sha256(openapi_body.encode("utf-8")).hexdigest()
-
         return (openapi_body, openapi_sha)

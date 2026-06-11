@@ -2,7 +2,7 @@ import logging
 import json
 import pulumi
 import pulumi_aws as aws
-import config as project_config
+from providers.aws import config as project_config
 
 from typing import Optional
 
@@ -16,7 +16,6 @@ class LambdaRoleStack(pulumi.ComponentResource):
                  opts: Optional[pulumi.ResourceOptions] = None):
         super().__init__("{{ cookiecutter.project_name }}:components:lambdaRoleStack", name, {}, opts)
 
-        # Create a execution role for the lambda function
         self.lambda_execution_role = aws.iam.Role(
             f"{name}-lambda-execution-role",
             name=f"{project_config.ENVIRONMENT}-{project_config.APP_NAME}-lambda-execution-role",
@@ -33,7 +32,7 @@ class LambdaRoleStack(pulumi.ComponentResource):
             inline_policies=[
                 {
                     "name": "lambda-log-policies",
-                    "policy": json.dumps({ 
+                    "policy": json.dumps({
                         "Version": "2012-10-17",
                         "Statement": [{
                             "Action": [
@@ -47,7 +46,7 @@ class LambdaRoleStack(pulumi.ComponentResource):
                     }),
                 }, {
                     "name": "lambda-parameters-secrets-policy",
-                    "policy": json.dumps({ 
+                    "policy": json.dumps({
                         "Version": "2012-10-17",
                         "Statement": [{
                             "Action": [
@@ -64,7 +63,7 @@ class LambdaRoleStack(pulumi.ComponentResource):
                     }),
                 }, {
                     "name": "lambda-networking-policy",
-                    "policy": json.dumps({ 
+                    "policy": json.dumps({
                         "Version": "2012-10-17",
                         "Statement": [{
                             "Action": [

@@ -63,8 +63,8 @@ class _DefaultLogger:
     def exception(self, msg, *args, **kwargs):
         self._logger.exception(msg, *args, stacklevel=2, **kwargs)
 
-    def inject_lambda_context(self, func=None, *, log_event: bool = False, clear_state: bool = False):
-        """No-op decorator matching powertools inject_lambda_context signature."""
+    def inject_function_context(self, func=None, *, log_event: bool = False, clear_state: bool = False):
+        """No-op decorator for provider-agnostic function context injection."""
         if func is None:
             def decorator(f):
                 return f
@@ -80,7 +80,9 @@ class LoggingStrategy(ABC):
 class AwsLoggingStrategy(LoggingStrategy):
     def get_logger(self, service: str) -> Any:
         from aws_lambda_powertools import Logger as PowertoolsLogger
-        return PowertoolsLogger(service=service)
+        logger = PowertoolsLogger(service=service)
+        logger.inject_function_context = logger.inject_lambda_context
+        return logger
 
 
 class DefaultLoggingStrategy(LoggingStrategy):

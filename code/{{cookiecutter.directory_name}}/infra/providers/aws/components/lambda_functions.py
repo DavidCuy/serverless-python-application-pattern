@@ -1,5 +1,4 @@
 import pulumi
-import config as project_config
 from pulumi import ResourceOptions
 from .lambdas import LambdasStack
 

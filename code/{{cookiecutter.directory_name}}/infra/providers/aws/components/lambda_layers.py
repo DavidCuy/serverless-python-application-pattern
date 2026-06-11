@@ -1,8 +1,7 @@
 import logging
 import pulumi
-import tempfile
 import pulumi_aws as aws
-import config as project_config
+from providers.aws import config as project_config
 
 from typing import Optional
 from pathlib import Path
