@@ -1,0 +1,1 @@
+# Not used for container-cloud — infra_config.py is not generated for this provider.

@@ -1,4 +1,4 @@
-"{endpoint_url}": 
+"{endpoint_url}":
   {endpoint_method}:
     summary: Endpoint.
     parameters:

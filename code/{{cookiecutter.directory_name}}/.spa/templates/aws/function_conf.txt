@@ -27,7 +27,6 @@ class Lambda{camel_name}Stack(pulumi.ComponentResource):
         function_name = "{lambda_name}"
         cur_directory = Path(__file__).parent
 
-        # Create a log group for the lambda function
         self.lambda_log_group = aws.cloudwatch.LogGroup(
             f"{{name}}-{{function_name}}-log-group",
             name=f"/aws/lambda/{{environment}}-{{app_name}}-{{function_name}}",
@@ -35,7 +34,6 @@ class Lambda{camel_name}Stack(pulumi.ComponentResource):
             opts=pulumi.ResourceOptions(parent=self)
         )
 
-        # Create a lambda function
         self.function = aws.lambda_.Function(
             f"{{name}}-function",
             name=f"{{environment}}-{{app_name}}-{{function_name}}",
@@ -67,10 +65,6 @@ class Lambda{camel_name}Stack(pulumi.ComponentResource):
             opts=pulumi.ResourceOptions(parent=self)
         )
 
-       
-
         self.register_outputs({{
             "function_name": self.function.name
         }})
-
-        

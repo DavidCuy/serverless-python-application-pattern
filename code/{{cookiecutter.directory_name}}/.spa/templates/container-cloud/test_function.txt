@@ -1,0 +1,45 @@
+import os
+import sys
+import json
+import logging
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from dotenv import load_dotenv
+load_dotenv(override=True)
+from unittest import TestCase, TestLoader, TestSuite, TextTestRunner, mock
+from uuid import uuid4
+
+class Test{camel_name}(TestCase):
+
+    def setUp(self) -> None:
+        return super().setUp()
+
+    def test_success(self, *_, **__):
+        from function import function_handler
+        event = {{
+            "version": "2.0",
+            "routeKey": "$default",
+            "rawPath": "/path/to/resource",
+            "rawQueryString": "parameter1=value1&parameter1=value2&parameter2=value",
+            "headers": {{
+                "Header1": "value1",
+                "Header2": "value1,value2"
+            }},
+            "queryStringParameters": None,
+            "body": None,
+            "pathParameters": {{}},
+            "isBase64Encoded": False
+        }}
+        output = function_handler(event, None)
+
+        self.assertEqual(output['statusCode'], 200)
+
+        response_body = json.loads(output['body'])
+
+test = Test{camel_name}()
+test.setUp()
+test_suite = TestLoader().loadTestsFromTestCase(Test{camel_name})
+
+runner = TextTestRunner()
+runner.run(test_suite)

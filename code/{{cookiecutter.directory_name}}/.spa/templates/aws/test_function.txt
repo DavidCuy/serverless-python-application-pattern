@@ -23,7 +23,7 @@ class Test{camel_name}(TestCase):
 
     def setUp(self) -> None:
         return super().setUp()
-    
+
     def test_success(self, *_, **__):
         from function import function_handler
         event = {{
@@ -98,4 +98,3 @@ test_suite = TestLoader().loadTestsFromTestCase(Test{camel_name})
 
 runner = TextTestRunner()
 runner.run(test_suite)
-

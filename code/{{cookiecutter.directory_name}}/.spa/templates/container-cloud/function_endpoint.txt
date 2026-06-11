@@ -1,0 +1,47 @@
+"{endpoint_url}":
+  {endpoint_method}:
+    summary: Endpoint.
+    parameters:
+    - name: x-api-key
+      in: header
+      required: true
+      type: string
+    consumes:
+    - application/json
+    produces:
+    - application/json
+    responses:
+      '200':
+        description: 200 response
+        schema:
+          "$ref": "#/definitions/Empty"
+        headers:
+          Access-Control-Allow-Origin:
+            type: string
+          Access-Control-Allow-Methods:
+            type: string
+          Access-Control-Allow-Headers:
+            type: string
+      '401':
+        description: 401 Unauthorized response
+        schema:
+          "$ref": "#/responses/Unauthorized"
+    security:
+    - api_key: []
+  options:
+    consumes:
+    - application/json
+    produces:
+    - application/json
+    responses:
+      '200':
+        description: 200 response
+        schema:
+          "$ref": "#/definitions/Empty"
+        headers:
+          Access-Control-Allow-Origin:
+            type: string
+          Access-Control-Allow-Methods:
+            type: string
+          Access-Control-Allow-Headers:
+            type: string
