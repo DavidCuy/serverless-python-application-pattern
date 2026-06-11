@@ -12,7 +12,7 @@ main: infra
 config:
   pulumi:tags:
     value:
-      pulumi:template: aws-python
+      pulumi:template: {% if cookiecutter.provider == 'aws' %}aws-python{% else %}{{ cookiecutter.provider }}-python{% endif %}
 
 template:
   description: |

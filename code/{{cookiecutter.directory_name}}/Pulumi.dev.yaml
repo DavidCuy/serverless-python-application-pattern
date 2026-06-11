@@ -1,5 +1,7 @@
 config:
   global:env: {{ cookiecutter.environment }}
   global:app-name: {{ cookiecutter.project_name }}
+{% if cookiecutter.provider == 'aws' %}
   aws:region: {{ cookiecutter.aws_region }}
+{% endif %}
 

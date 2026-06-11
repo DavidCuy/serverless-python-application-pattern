@@ -9,9 +9,6 @@ except Exception:
 APP_NAME = pulumi.Config("global").require("app-name")
 ROOT_PROJECT = Path(__file__).parent.parent
 
-parameters_cfg = pulumi.Config("parameters")
-vpc_cfg = pulumi.Config("vpc")
-
 {% if cookiecutter.provider == 'aws' %}
 import pulumi_aws as aws
 
