@@ -10,7 +10,7 @@
     "api_url": "http://localhost:5000",
     "environment": "dev",
     "dbDialect": ["mysql", "postgresql"],
-    "_dbDriver": "",
+    "_dbDriver": "{% if cookiecutter.dbDialect == 'mysql' %}pymysql{% elif cookiecutter.dbDialect == 'postgresql' %}psycopg2{% endif %}",
     "_db_extra_params": "",
     "docker_local_db_enable": false,
     "repostory_provider": null,
