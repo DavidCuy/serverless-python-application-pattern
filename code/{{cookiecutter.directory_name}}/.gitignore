@@ -216,3 +216,8 @@ tmp_build_layer/
 infra/providers/*/components/lambdas/*
 !infra/providers/*/components/lambdas/__init__.py
 infra/providers/*/components/openapi.json
+
+# Ansible
+ansible/inventory.ini
+ansible/.vault_pass
+ansible/*.retry

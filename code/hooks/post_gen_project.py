@@ -10,6 +10,10 @@ AWS_ONLY_PATHS = [
 
 INFRA_LESS_PROVIDERS = {"container-cloud"}
 
+CONTAINER_ONLY_PATHS = [
+    Path("ansible"),
+]
+
 if PROVIDER != "aws":
     for path in AWS_ONLY_PATHS:
         if path.exists():
@@ -41,3 +45,12 @@ if PROVIDER in INFRA_LESS_PROVIDERS:
     if infra_path.exists():
         shutil.rmtree(infra_path)
         print(f"[post-gen] Removed {infra_path} (provider={PROVIDER})")
+
+if PROVIDER != "container-cloud":
+    for path in CONTAINER_ONLY_PATHS:
+        if path.exists():
+            if path.is_dir():
+                shutil.rmtree(path)
+            else:
+                path.unlink()
+            print(f"[post-gen] Removed {path} (provider={PROVIDER})")

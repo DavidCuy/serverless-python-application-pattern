@@ -1,0 +1,35 @@
+- hosts: vps
+  become: yes
+  vars:
+    image: YOUR_DOCKERHUB_USER/{{ cookiecutter.repository }}:latest
+    container_name: {{ cookiecutter.project_name }}
+    env_file_remote: /tmp/app.env
+
+  tasks:
+    - name: Copy .env to VPS
+      copy:
+        src: "{% raw %}{{ playbook_dir }}{% endraw %}/../.env"
+        dest: "{% raw %}{{ env_file_remote }}{% endraw %}"
+        mode: '0600'
+
+    - name: Pull latest image
+      community.docker.docker_image:
+        name: "{% raw %}{{ image }}{% endraw %}"
+        source: pull
+        force_source: yes
+
+    - name: Deploy container
+      community.docker.docker_container:
+        name: "{% raw %}{{ container_name }}{% endraw %}"
+        image: "{% raw %}{{ image }}{% endraw %}"
+        state: started
+        restart_policy: always
+        recreate: yes
+        ports:
+          - "8000:8000"
+        env_file: "{% raw %}{{ env_file_remote }}{% endraw %}"
+
+    - name: Remove .env from VPS
+      file:
+        path: "{% raw %}{{ env_file_remote }}{% endraw %}"
+        state: absent
