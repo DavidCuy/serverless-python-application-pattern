@@ -11,13 +11,13 @@ paths:
   /:
     get:
       summary: Eco para testeo del api
+      produces:
+      - application/json
       responses:
         '200':
           description: 200 response
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Empty"
+          schema:
+            "$ref": "#/definitions/Empty"
 {% if cookiecutter.provider == 'aws' %}
       x-amazon-apigateway-integration:
         responses:
@@ -31,13 +31,17 @@ paths:
         type: mock
 {% endif %}
 
-components:
-  schemas:
-    Empty:
-      type: object
-      title: Empty Schema
-  securitySchemes:
-    api_key:
-      type: apiKey
-      in: header
-      name: x-api-key
+definitions:
+  Empty:
+    type: object
+    title: Empty Schema
+
+responses:
+  Unauthorized:
+    description: Unauthorized
+
+securityDefinitions:
+  api_key:
+    type: apiKey
+    in: header
+    name: x-api-key
